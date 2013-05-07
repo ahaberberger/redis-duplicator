@@ -2,3 +2,5 @@
 atlassian-ide-plugin.xml
 BongAuto.iml
 *.pyc
+xxx.json
+config/bongauto.yml
