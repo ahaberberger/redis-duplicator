@@ -1,6 +1,0 @@
-bongauto:
-    url: http://my.url.com/bla/blubb
-    username: name
-    password: pwd
-    pidfile: /tmp/bongauto.pid
-    datadir: /path/to/my/data/dir

@@ -1,6 +1,5 @@
 .idea
 atlassian-ide-plugin.xml
-BongAuto.iml
+redis-duplicator.iml
 *.pyc
 xxx.json
-config/bongauto.yml

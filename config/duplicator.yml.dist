@@ -1,0 +1,5 @@
+duplicator:
+    source_host: localhost
+    source_port: 6379
+    target_host: localhost
+    target_port: 6380
