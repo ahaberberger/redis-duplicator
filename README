@@ -1,1 +1,2 @@
-Bong Automatic Downloader for QNAP NAS
+A demon to filter keys from one redis instance to another.
+Triggered by redis pub sub.

@@ -1,13 +1,17 @@
 #!/usr/bin/env python
 __author__ = 'andreas.haberberger'
 
-import os, sys, time
+import os, sys, time, redis
 from daemon import Daemon
 
 
 class RedisDuplicator(Daemon):
 
+    def initialize(self):
+        a = ""
+
     def run(self):
+        self.initialize()
         while True:
             time.sleep(5)
 
