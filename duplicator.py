@@ -1,27 +1,42 @@
 #!/usr/bin/env python
 __author__ = 'andreas.haberberger'
 
-import os, sys, time
+import os, sys, yaml
 from daemon import Daemon
 from redisclient import RedisClient
+from duplicateexceptions import RedisConnectionException, RedisCommandException
 
 
 class RedisDuplicator(Daemon):
 
     def initialize(self):
-        self.sourceRedis = RedisClient('localhost', 6379)
-        self.targetRedis = RedisClient('localhost', 6380)
-        self.pubsub = self.sourceRedis.getClient().pubsub()
-        self.pubsub.subscribe(['info'])
+        try:
+            conffile = open('/etc/duplicator.yml', 'r')
+            self.config = yaml.safe_load(conffile)
+            conffile.close()
+
+            self.sourceRedis = RedisClient(self.config['duplicator']['source_host'], self.config['duplicator']['source_port'])
+            self.targetRedis = RedisClient(self.config['duplicator']['target_host'], self.config['duplicator']['target_port'])
+            self.pubsub = self.sourceRedis.getClient().pubsub()
+            self.pubsub.subscribe(['info'])
+        except RedisConnectionException as e:
+            print(e.value)
+            self.stop()
+        except IOError as e:
+            print(e.strerror)
+            self.stop()
+
 
     def run(self):
         self.initialize()
         for item in self.pubsub.listen():
-            #print(item['data'])
-            keys = self.sourceRedis.getClient().keys('+*')
-            for key in keys:
-                self.targetRedis.getClient().set(key[1:], self.sourceRedis.getClient().get(key))
-            #print(keys)
+            try:
+                keys = self.sourceRedis.getClient().keys('+*')
+                for key in keys:
+                    self.targetRedis.getClient().set(key[1:], self.sourceRedis.getClient().get(key))
+            except:
+                print("Error in execution!")
+
 
 
 if __name__ == "__main__":

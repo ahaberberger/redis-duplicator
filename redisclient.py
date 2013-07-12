@@ -1,6 +1,6 @@
 __author__ = 'andreas.haberberger'
 
-from redisconnectionexception import RedisConnectionException
+from duplicateexceptions import RedisConnectionException
 from redis import Redis
 from redis.exceptions import ConnectionError
 
