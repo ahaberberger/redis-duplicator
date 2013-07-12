@@ -18,7 +18,9 @@ class RedisDuplicator(Daemon):
             self.sourceRedis = RedisClient(self.config['duplicator']['source_host'], self.config['duplicator']['source_port'])
             self.targetRedis = RedisClient(self.config['duplicator']['target_host'], self.config['duplicator']['target_port'])
             self.pubsub = self.sourceRedis.getClient().pubsub()
-            self.pubsub.subscribe(['info'])
+            self.pubsub.subscribe(self.config['duplicator']['pubsub_channel'])
+
+            self.copyindicator = self.config['duplicator']['copy_indicator']
         except RedisConnectionException as e:
             print(e.value)
             self.stop()
@@ -31,9 +33,9 @@ class RedisDuplicator(Daemon):
         self.initialize()
         for item in self.pubsub.listen():
             try:
-                keys = self.sourceRedis.getClient().keys('+*')
+                keys = self.sourceRedis.getClient().keys('%s*' % self.copyindicator)
                 for key in keys:
-                    self.targetRedis.getClient().set(key[1:], self.sourceRedis.getClient().get(key))
+                    self.targetRedis.getClient().set(key[len(self.copyindicator):], self.sourceRedis.getClient().get(key))
             except:
                 print("Error in execution!")
 

@@ -3,3 +3,5 @@ duplicator:
     source_port: 6379
     target_host: localhost
     target_port: 6380
+    copy_indicator: +
+    pubsub_channel: changeinfo

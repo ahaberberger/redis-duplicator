@@ -1,2 +1,16 @@
 A demon to filter keys from one redis instance to another.
 Triggered by redis pub sub.
+
+Requirements
+
+Python 2.7
+PyYaml
+redis-py
+
+
+Instructions:
+
+Copy "./config/duplicator.yml.dist" to "/etc/duplicator.yml" and adapt to local situation.
+Start demon: "./duplicator.py start"
+Stop demon: "./duplicator.py stop"
+Restart demon: "./duplicator.py restart"
