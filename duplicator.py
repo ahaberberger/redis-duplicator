@@ -10,6 +10,8 @@ from copythread import CopyThread
 
 class RedisDuplicator(Daemon):
 
+    THREAD_TIMEOUT = 30
+
     def initialize(self):
         try:
             conffile = open('/etc/duplicator.yml', 'r')
@@ -36,6 +38,12 @@ class RedisDuplicator(Daemon):
             try:
                 bgtask = CopyThread(self.sourceRedis, self.targetRedis, self.copyindicator)
                 bgtask.start()
+                bgtask.join(self.THREAD_TIMEOUT)
+                if (bgtask.isAlive()):
+                    try:
+                        bgtask._Thread__stop()
+                    except:
+                        print('%s could not be terminated' % str(bgtask.getName()))
             except:
                 print("Error creating worker thread!")
 
