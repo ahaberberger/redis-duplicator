@@ -11,10 +11,11 @@ from copythread import CopyThread
 class RedisDuplicator(Daemon):
 
     THREAD_TIMEOUT = 30
+    CONFIG_FILE = '/opt/mxdscripts/duplicator/conf/duplicator.yml'
 
     def initialize(self):
         try:
-            conffile = open('/etc/duplicator.yml', 'r')
+            conffile = open(self.CONFIG_FILE, 'r')
             self.config = yaml.safe_load(conffile)
             conffile.close()
 
