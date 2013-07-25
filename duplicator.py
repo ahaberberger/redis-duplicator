@@ -26,10 +26,10 @@ class RedisDuplicator(Daemon):
             self.copyindicator = self.config['duplicator']['copy_indicator']
         except RedisConnectionException as e:
             print(e.value)
-            self.stop()
+            sys.exit(2)
         except IOError as e:
             print(e.strerror)
-            self.stop()
+            sys.exit(2)
 
 
     def run(self):
@@ -47,6 +47,19 @@ class RedisDuplicator(Daemon):
             except:
                 print("Error creating worker thread!")
 
+    def status(self):
+        # Check for pidfile
+        try:
+            pf = file(self.pidfile,'r')
+            pid = int(pf.read().strip())
+            pf.close()
+        except IOError:
+            pid = None
+
+        if pid:
+            return "running"
+        else:
+            return "not running"
 
 if __name__ == "__main__":
     daemon = RedisDuplicator('/var/tmp/duplicator.pid', stdin='/dev/stdin', stdout='/dev/stdout', stderr='/dev/stderr')
@@ -57,10 +70,12 @@ if __name__ == "__main__":
             daemon.stop()
         elif 'restart' == sys.argv[1]:
             daemon.restart()
+        elif 'status' == sys.argv[1]:
+            print(daemon.status())
         else:
             print "Unknown command"
             sys.exit(2)
         sys.exit(0)
     else:
-        print "usage: %s start|stop|restart" % sys.argv[0]
+        print "usage: %s start|stop|restart|status" % sys.argv[0]
         sys.exit(2)
