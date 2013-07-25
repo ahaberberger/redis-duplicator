@@ -57,9 +57,9 @@ class RedisDuplicator(Daemon):
             pid = None
 
         if pid:
-            return "running"
+            return True
         else:
-            return "not running"
+            return False
 
 if __name__ == "__main__":
     daemon = RedisDuplicator('/var/tmp/duplicator.pid', stdin='/dev/stdin', stdout='/dev/stdout', stderr='/dev/stderr')
@@ -71,7 +71,8 @@ if __name__ == "__main__":
         elif 'restart' == sys.argv[1]:
             daemon.restart()
         elif 'status' == sys.argv[1]:
-            print(daemon.status())
+            if not daemon.status():
+                exit(2)
         else:
             print "Unknown command"
             sys.exit(2)
