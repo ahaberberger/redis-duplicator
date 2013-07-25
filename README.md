@@ -22,6 +22,10 @@ Start demon: "./duplicator.py start"
 Stop demon: "./duplicator.py stop"
 Restart demon: "./duplicator.py restart"
 
+Query demon status: "./duplicator.py status"
+    Exitcode 0: demon running
+    Exitcode 2: demon not running
+
 Publish on source Redis on <pubsub_channel> with any message to trigger replication
 
 The config file:
