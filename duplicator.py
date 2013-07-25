@@ -63,7 +63,7 @@ class RedisDuplicator(Daemon):
             return False
 
 if __name__ == "__main__":
-    daemon = RedisDuplicator('/var/tmp/duplicator.pid', stdin='/dev/stdin', stdout='/dev/stdout', stderr='/dev/stderr')
+    daemon = RedisDuplicator('/var/run/duplicator.pid', stdin='/dev/stdin', stdout='/dev/stdout', stderr='/dev/stderr')
     if len(sys.argv) == 2:
         if 'start' == sys.argv[1]:
             daemon.start()

@@ -1,0 +1,83 @@
+#!/bin/sh
+#
+# duplicator        init file for starting up the redis duplicator daemon
+#
+# chkconfig:   - 20 80
+# description: Starts and stops the redis daemon.
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+name="duplicator.py"
+exec="/opt/mxdscripts/duplicator/active/$name"
+pidfile="/var/run/duplicator.pid"
+
+start() {
+    [ -x $exec ] || exit 5
+    echo -n $"Starting $name: "
+    $exec start
+    echo
+    retval=$?
+    return $retval
+}
+
+stop() {
+    [ -x $exec ] || exit 5
+    echo -n $"Stopping $name: "
+    $exec stop
+    echo
+    retval=$?
+    return $retval
+}
+
+restart() {
+    stop
+    start
+}
+
+reload() {
+    false
+}
+
+rh_status() {
+    $exec status
+    retval=$?
+    return $retval
+}
+
+rh_status_q() {
+    rh_status >/dev/null 2>&1
+}
+
+
+case "$1" in
+    start)
+        rh_status_q && exit 0
+        $1
+        ;;
+    stop)
+        rh_status_q || exit 0
+        $1
+        ;;
+    restart)
+        $1
+        ;;
+    reload)
+        rh_status_q || exit 7
+        $1
+        ;;
+    force-reload)
+        force_reload
+        ;;
+    status)
+        rh_status
+        ;;
+    condrestart|try-restart)
+        rh_status_q || exit 0
+        restart
+        ;;
+    *)
+        echo $"Usage: $0 {start|stop|status|restart|condrestart|try-restart}"
+        exit 2
+esac
+exit $?
