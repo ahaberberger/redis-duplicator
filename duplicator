@@ -16,8 +16,8 @@ start() {
     [ -x $exec ] || exit 5
     echo -n $"Starting $name: "
     $exec start
-    echo
     retval=$?
+    echo
     return $retval
 }
 
@@ -25,8 +25,8 @@ stop() {
     [ -x $exec ] || exit 5
     echo -n $"Stopping $name: "
     $exec stop
-    echo
     retval=$?
+    echo
     return $retval
 }
 
