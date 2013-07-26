@@ -11,7 +11,9 @@ Requirements
 2 Redis instances
 
 [Python 2.7](http://python.org/ "Python 2.7")
+
 [PyYaml](http://stackoverflow.com/questions/14261614/how-do-i-install-the-yaml-package-for-python "PyYaml")
+
 [redis-py](https://github.com/andymccurdy/redis-py "redis-py")
 
 
